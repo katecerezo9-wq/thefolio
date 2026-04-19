@@ -23,13 +23,22 @@ function App() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
+    // Simulate loading progress
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setLoading(false), 500);
+          return 100;
+        }
+        return prev + 2;
+      });
+    }, 40);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -56,9 +65,9 @@ function App() {
     return <HomePage />;
   };
 
-  // Show loading screen
+  // Show loading screen while loading
   if (loading) {
-    return <LoadingScreen />;
+    return <LoadingScreen progress={progress} />;
   }
 
   return (
@@ -82,7 +91,6 @@ function App() {
             </li>
             
             {!user ? (
-              // GUEST
               <>
                 <li>
                   <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>
@@ -106,7 +114,6 @@ function App() {
                 </li>
               </>
             ) : (
-              // LOGGED IN
               <>
                 <li>
                   <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>
