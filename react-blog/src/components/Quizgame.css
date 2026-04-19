@@ -1,0 +1,242 @@
+.quiz-section {
+    padding: 80px 10%;
+    background: #1a1a1a;
+    text-align: center;
+}
+
+.light-mode .quiz-section {
+    background: #f0f0f0;
+}
+
+.quiz-container {
+    background: #222;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 700px;
+    margin: 0 auto;
+    border: 2px solid #f1c40f;
+}
+
+.light-mode .quiz-container {
+    background: white;
+    border: 2px solid #d4ac0d;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.quiz-title {
+    color: #f1c40f;
+    margin-bottom: 25px;
+    font-size: 2.2em;
+}
+
+.light-mode .quiz-title {
+    color: #d4ac0d;
+}
+
+.quiz-question {
+    color: white;
+    font-size: 1.4em;
+    margin-bottom: 25px;
+    min-height: 60px;
+}
+
+.light-mode .quiz-question {
+    color: #333;
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+@media (max-width: 600px) {
+    .quiz-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+.quiz-option {
+    background: #333;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+    text-align: left;
+}
+
+.light-mode .quiz-option {
+    background: #f9f9f9;
+    color: #333;
+    border: 2px solid #ddd;
+}
+
+.quiz-option:hover {
+    border-color: #f1c40f;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(241, 196, 15, 0.2);
+}
+
+.light-mode .quiz-option:hover {
+    border-color: #d4ac0d;
+    box-shadow: 0 5px 15px rgba(212, 172, 13, 0.2);
+}
+
+.quiz-option.selected {
+    background: #f1c40f;
+    color: black;
+    border-color: #f1c40f;
+    font-weight: bold;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3);
+}
+
+.light-mode .quiz-option.selected {
+    background: #d4ac0d;
+    color: black;
+    border-color: #d4ac0d;
+    box-shadow: 0 5px 15px rgba(212, 172, 13, 0.3);
+}
+
+.quiz-option.correct-option {
+    background: #2ecc71 !important;
+    color: white !important;
+    border-color: #2ecc71 !important;
+}
+
+.quiz-option.wrong-option {
+    background: #e74c3c !important;
+    color: white !important;
+    border-color: #e74c3c !important;
+}
+
+.quiz-button {
+    background: #f1c40f;
+    color: black;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.1em;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin: 10px 5px;
+    min-width: 180px;
+}
+
+.light-mode .quiz-button {
+    background: #d4ac0d;
+}
+
+.quiz-button:hover {
+    background: #d4ac0d;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3);
+}
+
+.light-mode .quiz-button:hover {
+    background: #b8940b;
+    box-shadow: 0 5px 15px rgba(212, 172, 13, 0.3);
+}
+
+.quiz-button:disabled {
+    background: #666;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.light-mode .quiz-button:disabled {
+    background: #ccc;
+    color: #777;
+}
+
+.quiz-result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+    min-height: 50px;
+}
+
+.quiz-result.correct {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+}
+
+.quiz-result.incorrect {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.quiz-final {
+    background: rgba(241, 196, 15, 0.1);
+    color: #f1c40f;
+    padding: 25px;
+    border-radius: 10px;
+    font-size: 1.3em;
+    margin-top: 20px;
+}
+
+.light-mode .quiz-final {
+    background: rgba(212, 172, 13, 0.1);
+    color: #d4ac0d;
+}
+
+.quiz-restart {
+    margin-top: 25px;
+}
+
+.quiz-progress {
+    color: #aaa;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.light-mode .quiz-progress {
+    color: #666;
+}
+
+.quiz-score-display {
+    color: #f1c40f;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.light-mode .quiz-score-display {
+    color: #d4ac0d;
+}
+
+.difficulty-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.difficulty-easy {
+    background: #2ecc71;
+    color: white;
+}
+
+.difficulty-medium {
+    background: #f39c12;
+    color: white;
+}
+
+.difficulty-hard {
+    background: #e74c3c;
+    color: white;
+}

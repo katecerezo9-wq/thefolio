@@ -1,0 +1,4 @@
+import profileImg from '../assets/profile.jpg';
+
+// Then use
+<img src={profileImg} alt="Kate Ann" />
