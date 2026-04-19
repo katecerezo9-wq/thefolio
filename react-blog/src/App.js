@@ -1,49 +1,196 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-import { ThemeProvider } from './context/ThemeContext';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import { Routes, Route, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import LoadingScreen from './components/LoadingScreen';
+import Home from './pages/Home';
 import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
-import RegisterPage from './pages/RegisterPage';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import ProfilePage from './pages/ProfilePage';
+import CreatePostPage from './pages/CreatePostPage';
+import PostPage from './pages/PostPage';
+import AdminPage from './pages/AdminPage';
+import AdminMessages from './pages/AdminMessages';
+import './App.css';
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [mode, setMode] = useState(() => {
+    return localStorage.getItem('mode') || 'dark';
+  });
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);  // Add loading state
 
   useEffect(() => {
-    // Simulate loading time from your index.html
+    // Simulate loading time
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2000);
-
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (mode === 'light') {
+      document.body.classList.add('light-mode');
+    } else {
+      document.body.classList.remove('light-mode');
+    }
+    localStorage.setItem('mode', mode);
+  }, [mode]);
+
+  const toggleMode = () => {
+    setMode(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  // Determine which home page to show
+  const HomeComponent = () => {
+    if (!user) return <Home />;
+    return <HomePage />;
+  };
+
+  // Show loading screen while loading
   if (loading) {
     return <LoadingScreen />;
   }
 
   return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <div className="App">
-          <Header />
-          <main>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-            </Routes>
-          </main>
-          <Footer />
+    <div className="page-container">
+      <header className="main-header">
+        <div className="header-left">
+          <div className="logo">Kate<span>Ann</span></div>
+          <div className="mode-toggle">
+            <button className="mode-toggle-btn" onClick={toggleMode}>
+              <span className="mode-icon">{mode === 'light' ? '🌙' : '☀️'}</span>
+              <span className="mode-text">{mode === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+            </button>
+          </div>
         </div>
-      </BrowserRouter>
-    </ThemeProvider>
+        <nav className="nav-menu">
+          <ul>
+            <li>
+              <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}>
+                Home
+              </NavLink>
+            </li>
+            
+            {!user ? (
+              // GUEST
+              <>
+                <li>
+                  <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>
+                    About
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''}>
+                    Contact
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/register" className={({ isActive }) => isActive ? 'active' : ''}>
+                    Register
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/login" className={({ isActive }) => isActive ? 'active' : ''}>
+                    Login
+                  </NavLink>
+                </li>
+              </>
+            ) : (
+              // LOGGED IN
+              <>
+                <li>
+                  <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>
+                    About
+                  </NavLink>
+                </li>
+                {user.role !== 'admin' && (
+                  <li>
+                    <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''}>
+                      Contact
+                    </NavLink>
+                  </li>
+                )}
+                <li>
+                  <NavLink to="/profile" className={({ isActive }) => isActive ? 'active' : ''}>
+                    Profile
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/create-post" className={({ isActive }) => isActive ? 'active' : ''}>
+                    Create Post
+                  </NavLink>
+                </li>
+                {user.role === 'admin' && (
+                  <>
+                    <li>
+                      <NavLink to="/admin" className={({ isActive }) => isActive ? 'active' : ''}>
+                        Admin
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/admin/messages" className={({ isActive }) => isActive ? 'active' : ''}>
+                        Messages
+                      </NavLink>
+                    </li>
+                  </>
+                )}
+                <li>
+                  <button onClick={handleLogout} className="logout-btn-nav">Logout</button>
+                </li>
+              </>
+            )}
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <Routes>
+          <Route path="/" element={<HomeComponent />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/posts/:id" element={<PostPage />} />
+
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/create-post" element={
+            <ProtectedRoute>
+              <CreatePostPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin" element={
+            <ProtectedRoute role="admin">
+              <AdminPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/messages" element={
+            <ProtectedRoute role="admin">
+              <AdminMessages />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </main>
+
+      <footer className="main-footer">
+        <p>Contact: katecerezo9@gmail.com | La Union, Philippines</p>
+        <p>&copy; 2025 Kate Ann Cerezo. All rights reserved.</p>
+      </footer>
+    </div>
   );
 }
 
