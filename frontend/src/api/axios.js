@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+// Use different baseURL for production and development
+const baseURL = process.env.NODE_ENV === 'production' 
+  ? 'https://thefolio-api.onrender.com/api'  // Replace with your actual Render URL
+  : 'http://localhost:5000/api';
+
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: baseURL,
 });
 
 // Add token to every request
@@ -13,4 +18,4 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-export default API; 
+export default API;
