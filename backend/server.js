@@ -16,15 +16,9 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Middleware - Updated CORS for Vercel frontend
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://thefolio-51wmpwfr7-katecerezo9-wqs-projects.vercel.app',
-    'https://*.vercel.app'
-  ],
-  credentials: true
-}));
+// Middleware - Allow all origins for testing
+app.use(cors());  // Temporary: allow all origins
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
