@@ -1,32 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-const LoadingScreen = () => {
-  const [progress, setProgress] = useState(0);
-  const [status, setStatus] = useState('Connecting to server...');
+const LoadingScreen = ({ progress = 0 }) => {
+  const messages = [
+    "Initializing resources...",
+    "Loading hero data...",
+    "Checking Rank status...",
+    "Welcome, Legend!"
+  ];
 
-  useEffect(() => {
-    const messages = [
-      "Initializing resources...",
-      "Loading hero data...",
-      "Checking Rank status...",
-      "Welcome, Legend!"
-    ];
-
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        const newProgress = prev + 1;
-        
-        if (newProgress === 25) setStatus(messages[0]);
-        if (newProgress === 50) setStatus(messages[1]);
-        if (newProgress === 75) setStatus(messages[2]);
-        if (newProgress === 95) setStatus(messages[3]);
-        
-        return newProgress;
-      });
-    }, 40);
-
-    return () => clearInterval(interval);
-  }, []);
+  let status = messages[0];
+  if (progress >= 25) status = messages[0];
+  if (progress >= 50) status = messages[1];
+  if (progress >= 75) status = messages[2];
+  if (progress >= 95) status = messages[3];
 
   return (
     <div style={{
@@ -41,12 +27,15 @@ const LoadingScreen = () => {
       fontFamily: "'Oswald', sans-serif",
       overflow: 'hidden'
     }}>
-      <div className="animate-up">
+      <div className="animate-up" style={{
+        textAlign: 'center',
+        padding: '20px'
+      }}>
         <h1 style={{
-          fontSize: '5rem',
+          fontSize: 'clamp(2rem, 10vw, 5rem)',
           fontWeight: 800,
           color: '#fff',
-          letterSpacing: '20px',
+          letterSpacing: 'clamp(5px, 3vw, 20px)',
           margin: 0,
           textTransform: 'uppercase',
           background: 'linear-gradient(90deg, #555, #f1c40f, #fff, #f1c40f, #555)',
@@ -54,9 +43,14 @@ const LoadingScreen = () => {
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          animation: 'shine 3s linear infinite'
+          animation: 'shine 3s linear infinite',
+          whiteSpace: 'nowrap'
         }}>LOADING</h1>
-        <div style={{ width: '350px', marginTop: '20px', textAlign: 'center' }}>
+        <div style={{ 
+          width: 'clamp(200px, 80vw, 350px)', 
+          marginTop: '20px', 
+          textAlign: 'center' 
+        }}>
           <div style={{
             width: '100%',
             height: '4px',
@@ -74,8 +68,8 @@ const LoadingScreen = () => {
           </div>
           <div style={{
             color: '#666',
-            fontSize: '0.8rem',
-            letterSpacing: '5px',
+            fontSize: 'clamp(10px, 4vw, 14px)',
+            letterSpacing: 'clamp(2px, 2vw, 5px)',
             marginTop: '15px',
             textTransform: 'uppercase'
           }}>{status}</div>
