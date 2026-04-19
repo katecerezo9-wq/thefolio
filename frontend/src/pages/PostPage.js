@@ -14,11 +14,6 @@ const PostPage = () => {
   const [error, setError] = useState('');
   const [refreshComments, setRefreshComments] = useState(false);
 
-  useEffect(() => {
-    fetchPost();
-    fetchComments();
-  }, [id, refreshComments]);
-
   const fetchPost = async () => {
     try {
       const { data } = await API.get(`/posts/${id}`);
@@ -39,6 +34,12 @@ const PostPage = () => {
     }
   };
 
+  useEffect(() => {
+    fetchPost();
+    fetchComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, refreshComments]);
+
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
@@ -49,7 +50,7 @@ const PostPage = () => {
     try {
       await API.post(`/comments/${id}`, { body: newComment });
       setNewComment('');
-      setRefreshComments(prev => !prev); // Trigger reload of comments
+      setRefreshComments(prev => !prev);
       alert('Comment posted successfully!');
     } catch (err) {
       console.error('Error posting comment:', err);
@@ -62,7 +63,7 @@ const PostPage = () => {
     
     try {
       await API.delete(`/comments/${commentId}`);
-      setRefreshComments(prev => !prev); // Trigger reload of comments
+      setRefreshComments(prev => !prev);
     } catch (err) {
       alert('Failed to delete comment');
     }

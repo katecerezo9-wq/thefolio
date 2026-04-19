@@ -164,7 +164,6 @@ const About = () => {
   };
 
   const restartQuiz = () => {
-    // Simply restart without shuffling
     setCurrentQuestionIndex(0);
     setSelectedOptionIndex(null);
     setScore(0);
@@ -338,7 +337,7 @@ const About = () => {
           ) : (
             <>
               <div className="quiz-final" id="quizFinal">
-                <div style={{fontSize: '1.5em', marginBottom: '15px'}}>Final Score: <strong>{score} points}</strong></div>
+                <div style={{fontSize: '1.5em', marginBottom: '15px'}}>Final Score: <strong>{score} points</strong></div>
                 <div style={{marginBottom: '10px'}}>Your Rank: <strong style={{color: '#f1c40f'}}>
                   {percentage >= 90 ? 'Mythical Glory' :
                    percentage >= 75 ? 'Mythic' :
