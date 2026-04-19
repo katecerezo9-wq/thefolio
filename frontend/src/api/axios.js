@@ -1,10 +1,10 @@
 import axios from 'axios';
 
+// Direktang gamitin ang bagong Render URL
 const API = axios.create({
-  baseURL: 'https://thefolio-api-hiwj.onrender.com/api',  // Bagong Render URL
+  baseURL: 'https://thefolio-api-hiwj.onrender.com/api',
 });
 
-// Add token to every request
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
