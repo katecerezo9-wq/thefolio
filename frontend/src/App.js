@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import LoadingScreen from './components/LoadingScreen';
 import Home from './pages/Home';
 import HomePage from './pages/HomePage';
 import About from './pages/About';
@@ -21,6 +22,15 @@ function App() {
   });
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (mode === 'light') {
@@ -41,12 +51,15 @@ function App() {
   };
 
   // Determine which home page to show
-  // Guest = portfolio (Home)
-  // Logged in (regular user & admin) = posts feed (HomePage)
   const HomeComponent = () => {
     if (!user) return <Home />;
     return <HomePage />;
   };
+
+  // Show loading screen
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="page-container">
@@ -93,14 +106,13 @@ function App() {
                 </li>
               </>
             ) : (
-              // LOGGED IN (regular user & admin)
+              // LOGGED IN
               <>
                 <li>
                   <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>
                     About
                   </NavLink>
                 </li>
-                {/* Contact - HINDI NAKIKITA NG ADMIN */}
                 {user.role !== 'admin' && (
                   <li>
                     <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''}>
@@ -143,17 +155,13 @@ function App() {
 
       <main>
         <Routes>
-          {/* Home route - Guest gets portfolio, Logged in gets posts feed */}
           <Route path="/" element={<HomeComponent />} />
-          
-          {/* Other public routes */}
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/posts/:id" element={<PostPage />} />
 
-          {/* Protected Routes - Login Required */}
           <Route path="/profile" element={
             <ProtectedRoute>
               <ProfilePage />
@@ -165,7 +173,6 @@ function App() {
             </ProtectedRoute>
           } />
 
-          {/* Admin Only Routes */}
           <Route path="/admin" element={
             <ProtectedRoute role="admin">
               <AdminPage />
