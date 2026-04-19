@@ -16,9 +16,13 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Middleware - Updated CORS for production
+// Middleware - Updated CORS for Vercel frontend
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://thefolio.vercel.app', 'https://thefolio-*.vercel.app'],
+  origin: [
+    'http://localhost:3000',
+    'https://thefolio-51wmpwfr7-katecerezo9-wqs-projects.vercel.app',
+    'https://*.vercel.app'
+  ],
   credentials: true
 }));
 app.use(express.json());
